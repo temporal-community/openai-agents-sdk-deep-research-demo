@@ -24,14 +24,14 @@ The interactive workflow is based on patterns from the [OpenAI Deep Research API
 
 ```
 User Query → Planner Agent → Search Agent(s) → Writer Agent → Markdown Report
-              (gpt-4o)        (parallel)       (gpt-4o)
+              (gpt-6-luna)        (parallel)       (gpt-6-luna)
 ```
 
 ### Agent Roles in Basic Flow:
 
 **Planner Agent** (`planner_agent.py`)
 - Analyzes the user query and generates 5-20 strategic web search terms
-- Uses `gpt-4o` for comprehensive search planning
+- Uses `gpt-6-luna` for comprehensive search planning
 - Outputs structured `WebSearchPlan` with search terms and reasoning
 - Each search item includes `reason` (justification) and `query` (search term)
 
@@ -43,7 +43,7 @@ User Query → Planner Agent → Search Agent(s) → Writer Agent → Markdown R
 - Uses no LLM model directly - just processes search tool results
 
 **Writer Agent** (`writer_agent.py`)
-- Uses `o3-mini` model for high-quality report synthesis
+- Uses `gpt-5.6-sol` model for high-quality report synthesis
 - Generates comprehensive 5-10 page reports (800-2000 words)
 - Returns structured `ReportData` with:
   - `short_summary`: 2-3 sentence overview
@@ -55,26 +55,26 @@ User Query → Planner Agent → Search Agent(s) → Writer Agent → Markdown R
 
 ```
 User Query
-    └──→ Triage Agent (gpt-4o-mini)
+    └──→ Triage Agent (gpt-6-luna)
               └──→ Decision: Clarification Needed?
                             │
-                ├── Yes → Clarifying Agent (gpt-4o-mini)
+                ├── Yes → Clarifying Agent (gpt-6-luna)
                 │             └──→ Generate Questions
                 │                          └──→ User Input
-                │                                     └──→ Instruction Agent (gpt-4o-mini)
+                │                                     └──→ Instruction Agent (gpt-6-luna)
                 │                                                   └──→ Enriched Query
                 │                                                             │
-                │                                                             └──→ Planner Agent (gpt-4o)
+                │                                                             └──→ Planner Agent (gpt-6-luna)
                 │                                                                          ├──→ Search Agent(s) (parallel)
-                │                                                                          └──→ Writer Agent (o3-mini)
+                │                                                                          └──→ Writer Agent (gpt-5.6-sol)
                 │                                                                                     └──→ PDF Generator Agent
                 │                                                                                                └──→ Report + PDF
                 │
-                └── No → Instruction Agent (gpt-4o-mini)
+                └── No → Instruction Agent (gpt-6-luna)
                                └──→ Direct Research
-                                          └──→ Planner Agent (gpt-4o)
+                                          └──→ Planner Agent (gpt-6-luna)
                                                        ├──→ Search Agent(s) (parallel)
-                                                       └──→ Writer Agent (o3-mini)
+                                                       └──→ Writer Agent (gpt-5.6-sol)
                                                                      └──→ PDF Generator Agent
                                                                                 └──→ Report + PDF
 ```
@@ -84,12 +84,12 @@ User Query
 **Triage Agent** (`triage_agent.py`)
 - Analyzes query specificity and determines if clarifications are needed
 - Routes to either clarifying questions or direct research using agent handoffs
-- Uses `gpt-4o-mini` for fast, cost-effective decision making
+- Uses `gpt-6-luna` for fast, cost-effective decision making
 - Looks for vague terms, missing context, or broad requests
 - Can handoff to either `new_clarifying_agent()` or `new_instruction_agent()`
 
 **Clarifying Agent** (`clarifying_agent.py`)
-- Uses `gpt-4o-mini` model for question generation
+- Uses `gpt-6-luna` model for question generation
 - Generates 2-3 targeted questions to gather missing information
 - Focuses on preferences, constraints, and specific requirements
 - Returns structured output (`Clarifications` model with `questions` list)
@@ -97,7 +97,7 @@ User Query
 - Integrates with Temporal workflow updates for user interaction
 
 **Instruction Agent** (`instruction_agent.py`)
-- Uses `gpt-4o-mini` model for query enhancement
+- Uses `gpt-6-luna` model for query enhancement
 - Enriches original query with user responses to clarifying questions
 - Processes specific queries that don't need clarifications
 - Rewrites queries into detailed research instructions using first-person perspective
@@ -105,7 +105,7 @@ User Query
 - Handles language preferences and output formatting requirements
 
 **PDF Generator Agent** (`pdf_generator_agent.py`)
-- Uses `gpt-4o-mini` for intelligent formatting analysis and styling decisions
+- Uses `gpt-6-luna` for intelligent formatting analysis and styling decisions
 - Calls the `generate_pdf` activity with 30-second timeout for actual PDF creation
 - Returns structured output (`PDFReportData`) including:
   - `success`: Boolean indicating generation status
@@ -170,14 +170,14 @@ The interactive workflow will ask clarifying questions like:
 ## Model Configuration
 
 **Cost-Optimized Models:**
-- **Triage Agent**: `gpt-4o-mini` - Fast routing decisions
-- **Clarifying Agent**: `gpt-4o-mini` - Question generation  
-- **Instruction Agent**: `gpt-4o-mini` - Query enrichment
+- **Triage Agent**: `gpt-6-luna` - Fast routing decisions
+- **Clarifying Agent**: `gpt-6-luna` - Question generation  
+- **Instruction Agent**: `gpt-6-luna` - Query enrichment
 
 **Research Models:**
-- **Planner Agent**: `gpt-4o` - Complex search strategy
+- **Planner Agent**: `gpt-6-luna` - Complex search strategy
 - **Search Agent**: Uses web search APIs (no LLM)
-- **Writer Agent**: `o3-mini` - High-quality report synthesis
-- **PDF Generator Agent**: `gpt-4o-mini` - PDF formatting decisions + WeasyPrint for generation
+- **Writer Agent**: `gpt-5.6-sol` - High-quality report synthesis
+- **PDF Generator Agent**: `gpt-6-luna` - PDF formatting decisions + WeasyPrint for generation
 
 This configuration balances cost efficiency for routing/clarification logic while using more powerful models for core research tasks.

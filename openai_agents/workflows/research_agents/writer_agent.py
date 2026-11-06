@@ -41,6 +41,6 @@ def new_writer_agent():
     return Agent(
         name="WriterAgent",
         instructions=PROMPT,
-        model="o3-mini",
+        model="gpt-5.6-sol",
         output_type=ReportData,
     )

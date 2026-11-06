@@ -64,7 +64,7 @@ def new_instruction_agent() -> Agent:
 
     return Agent(
         name="Research Instruction Agent",
-        model="gpt-4o-mini",
+        model="gpt-6-luna",
         instructions=RESEARCH_INSTRUCTION_AGENT_PROMPT,
         handoffs=[planner_agent],
     )
