@@ -55,7 +55,7 @@ async def generate_image(
 
         # Generate image via OpenAI API
         result = client.images.generate(
-            model="gpt-image-1",
+            model="gpt-image-2.6-sunburst",
             prompt=prompt,
             quality="low",  # hardcoded low quality for speed/efficiency
             size=styling_options.size,

@@ -31,6 +31,6 @@ def new_planner_agent():
     return Agent(
         name="PlannerAgent",
         instructions=PROMPT,
-        model="gpt-4o",
+        model="gpt-6-luna",
         output_type=WebSearchPlan,
     )

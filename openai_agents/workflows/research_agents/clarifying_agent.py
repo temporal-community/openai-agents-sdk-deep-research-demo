@@ -43,7 +43,7 @@ def new_clarifying_agent() -> Agent:
 
     return Agent(
         name="Clarifying Questions Agent",
-        model="gpt-4o-mini",
+        model="gpt-6-luna",
         instructions=CLARIFYING_AGENT_PROMPT,
         output_type=Clarifications,
         handoffs=[instruction_agent],

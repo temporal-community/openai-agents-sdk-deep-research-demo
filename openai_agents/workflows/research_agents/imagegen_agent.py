@@ -61,7 +61,7 @@ def new_imagegen_agent() -> Agent:
     return Agent(
         name="ImageGenAgent",
         instructions=IMAGE_GEN_PROMPT,
-        model="gpt-4o-mini",  # Fast, cost-effective for description generation
+        model="gpt-6-luna",  # Fast, cost-effective for description generation
         tools=[
             temporal_agents.workflow.activity_as_tool(
                 generate_image, start_to_close_timeout=timedelta(seconds=60)

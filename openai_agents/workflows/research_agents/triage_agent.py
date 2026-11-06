@@ -77,7 +77,7 @@ def new_triage_agent() -> Agent:
 
     return Agent(
         name="Triage Agent",
-        model="gpt-4o-mini",
+        model="gpt-6-luna",
         instructions=TRIAGE_AGENT_PROMPT,
         handoffs=[clarifying_agent, instruction_agent],
     )
